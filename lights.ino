@@ -1,15 +1,17 @@
 #define btn A5
-#define led_red 2
-#define led_yellow 3
-#define led_green 4
-#define led_blue 6
+#define led_red 6
+#define led_yellow 9
+#define led_green 10
+#define led_blue 11
+
+// Пришлось поменять пины т.к. не все работают с изменением яркости (только 3, 5, 6, 9, 10, 11)
 
 bool butt_flag = 0;
 bool butt;
 unsigned long last_press = 0;
 unsigned short mode = 0;
 int leds[] = {led_red, led_yellow, led_green, led_blue};
-int count = 4;
+int count = sizeof(leds) / sizeof(leds[0]);
 
 void setup() {
   pinMode(btn, INPUT_PULLUP); // Наша кнопка
@@ -68,15 +70,21 @@ void loop() {
     }
   }
   if (mode == 5) {
-  for (int brightness = 0; brightness <= 255; brightness++) {
-    analogWrite(led_blue, brightness);
-    delay(10); // скорость нарастания яркости
+    for (int brightness = 0; brightness <= 255; brightness++) {
+      analogWrite(led_red, brightness);
+      analogWrite(led_yellow, brightness);
+      analogWrite(led_green, brightness);
+      analogWrite(led_blue, brightness);
+      delay(10); // скорость нарастания яркости
+    }
+    for (int brightness = 255; brightness >= 0; brightness--) {
+      analogWrite(led_red, brightness);
+      analogWrite(led_yellow, brightness);
+      analogWrite(led_green, brightness);
+      analogWrite(led_blue, brightness);
+      delay(10); // скорость убывания
+    }
   }
-  for (int brightness = 255; brightness >= 0; brightness--) {
-    analogWrite(led_blue, brightness);
-    delay(10); // скорость убывания
-  }
-}
 
   if (mode == 0){
     digitalWrite(led_red, 0);
